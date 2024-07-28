@@ -1,0 +1,9 @@
+[package]
+name = "rust_new_proj"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures-timer = "0.3"
+delay_timer = "*"
+futures = "0.3"
