@@ -1,14 +1,23 @@
-// use futures::executor;
+use mini_redis::{client, Result};
 
-async fn hello_world() {
-futures_timer::Delay::new(std::time::Duration::from_secs(3)).await;
-    println!("hello, world!");
-}
 
-fn main() {
-    println!("start");
+fn main() -> Result<()> {
 
-    futures::executor::block_on(hello_world());
-    println!("end");
-
+    let mut runtime = tokio::runtime::Runtime::new().unwrap();
+    runtime.block_on(async {
+        let a = client::connect("127.0.0.1:6379");
+    
+        // Open a connection to the mini-redis address.
+        let mut client = client::connect("127.0.0.1:6379").await?;
+    
+        // Set the key "hello" with value "world"
+        client.set("hello", "world".into()).await? ;
+    
+        // Get key "hello"
+        let result = client.get("hello").await?;
+    
+        println!("got value from the server; result={:?}", result);
+    
+        Ok(())
+    })
 }
